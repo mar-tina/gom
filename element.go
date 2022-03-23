@@ -8,12 +8,12 @@ type Element struct {
 	Tag        string
 	isFinite   bool
 	noClose    bool
-	attributes []Attribute
-	children   []*Element
+	Attributes []Attribute
+	Children   []*Element
 }
 
 func H(t string, options ...*Option) *Element {
-	el := &Element{Tag: t, attributes: []Attribute{}, children: []*Element{}}
+	el := &Element{Tag: t, Attributes: []Attribute{}, Children: []*Element{}}
 	for _, option := range options {
 		if option.Name == IsFinite.Name {
 			el.isFinite = true
@@ -26,12 +26,12 @@ func H(t string, options ...*Option) *Element {
 }
 
 func (el *Element) A(attrs ...Attribute) *Element {
-	el.attributes = attrs
+	el.Attributes = attrs
 	return el
 }
 
 func (el *Element) C(children ...*Element) *Element {
-	el.children = children
+	el.Children = children
 	return el
 }
 
@@ -42,7 +42,7 @@ func (el Element) Build() (html string) {
 	}
 
 	attrs := ""
-	for _, attr := range el.attributes {
+	for _, attr := range el.Attributes {
 		attrs += " " + attr.Build()
 	}
 
@@ -52,7 +52,7 @@ func (el Element) Build() (html string) {
 	}
 	html += fmt.Sprintf("<%s%s%s>", el.Tag, attrs, noClose)
 
-	for _, child := range el.children {
+	for _, child := range el.Children {
 		html += child.Build()
 	}
 
